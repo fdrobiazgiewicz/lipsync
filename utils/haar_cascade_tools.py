@@ -115,8 +115,8 @@ def rectangle_center(rectangle):
 
 
 if __name__ == '__main__':
-    DB_PATH = '/Users/mjankows/private_workspace/engineer/db/'
-    frame_file = 'more/pictures/007-02.jpg'
+    DB_PATH = '/Users/phili/private_workspace/engineer/db/'
+    frame_file = 'dP-IlGZBH1E/pictures/002-01.jpg'
     PATH = DB_PATH + frame_file
 
     out = detect_with_fallback(cv2.imread(PATH),

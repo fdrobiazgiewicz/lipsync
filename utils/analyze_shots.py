@@ -3,7 +3,7 @@ from os import listdir
 from os.path import basename, dirname
 from pathlib import Path
 
-from haar_cascade_tools import has_one_face
+from utils.haar_cascade_tools import has_one_face
 from scenedetect import SceneManager
 from scenedetect import VideoManager
 from scenedetect.detectors import ContentDetector
@@ -97,8 +97,8 @@ def extract_sequences(db_path, filename, scene_list):
 
 
 if __name__ == '__main__':
-    DB_PATH = '/Users/mjankows/private_workspace/engineer/db/'
-    NAME = 'introverts'
+    DB_PATH = '/Users/phili/private_workspace/engineer/db/'
+    NAME = 'UnoE8M5qbrk'
     THRESHOLD = 30
     MIN_SCENE_SECONDS = 7
 

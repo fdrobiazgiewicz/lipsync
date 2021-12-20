@@ -5,8 +5,8 @@ from imutils.video import FileVideoStream
 from tqdm import tqdm
 
 # TODO: fix those global variables
-LANDMARKS_FILE_68 = '/Users/mjankows/private_workspace/lipsync/models/shape_predictor_68_face_landmarks.dat'
-LANDMARKS_FILE_5 = '/Users/mjankows/private_workspace/lipsync/models/shape_predictor_5_face_landmarks.dat'
+LANDMARKS_FILE_68 = '/Users/phili/private_workspace/lipsync/models/shape_predictor_68_face_landmarks.dat'
+LANDMARKS_FILE_5 = '/Users/phili/private_workspace/lipsync/models/shape_predictor_5_face_landmarks.dat'
 WIDTH = 256
 
 FACE_DETECTOR = get_frontal_face_detector()
@@ -68,9 +68,9 @@ def get_parameters_for_file(path):
 
 
 if __name__ == '__main__':
-    DB_PATH = '/Users/mjankows/private_workspace/engineer/db/'
-    frame_file = 'more/pictures/007-02.jpg'
+    DB_PATH = '/Users/phili/private_workspace/engineer/db/'
+    frame_file = 'dP-IlGZBH1E/pictures/002-01.jpg'
     PATH = DB_PATH + frame_file
-    video_path = '/Users/mjankows/private_workspace/engineer/db/more/sequences/more-004.mp4'
+    video_path = r'/Users/phili/private_workspace/engineer/db/raw/dP-IlGZBH1E.mp4'
 
     process_with_buffered_reader(video_path, 'processed.avi', desired_width=256)
