@@ -10,16 +10,32 @@ from utils.data_preparation import save_data
 from moviepy.editor import VideoFileClip
 
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--input", required=True,
-                help="path to .txt with YouTube links")
-ap.add_argument("-a", "--append",
-                 help="do not create header (appending existing .csv)")
+ap.add_argument(
+    "-i",
+    "--input",
+    required=True,
+    help="path to .txt with YouTube links"
+)
+
+ap.add_argument(
+    "-f",
+    "--frames",
+    required=True,
+    help="number of frames to analyse"
+)
+
+ap.add_argument(
+    "-a",
+    "--append",
+    help="do not create header (appending existing .csv)",
+    action='store_true'
+)
+
 args = vars(ap.parse_args())
 
 
-
 if __name__ == "__main__":
-    with open('D:/links.txt') as file:
+    with open(args['input']) as file:
         lines = file.readlines()
         links = [line.rstrip() for line in lines]
 
@@ -31,7 +47,10 @@ if __name__ == "__main__":
             print(f'Found {len(aligned_videos)} aligned videos. Shifting...')
             sequence = '001'
             for video, counter in zip(aligned_videos, range(1, len(aligned_videos))):
-                sequence = f'00{counter}'
+                if counter < 10:
+                    sequence = f'00{counter}'
+                else:
+                    sequence = f'0{counter}'
                 face_file = f'db/{id}/aligned/{id}-{sequence}.mp4-aligned.avi'
                 sequence_file = f'db/{id}/sequences/{id}-{sequence}.mp4'
 
@@ -48,8 +67,13 @@ if __name__ == "__main__":
                           delta_millis=delta_millis)
 
                     # Tracking voice and lips movement and saving it to .csv
-                    shifted_path = f"db/{id}/shifted/{id}-{sequence}_shifted_{'plus' if delta_millis > 0 else 'minus'}_{abs(delta_millis)}.mp4"
-                    save_data(shifted_path, delta_millis)
+                    shifted_path = f"db/{id}/shifted/{id}-{sequence}_shifted_" \
+                                   f"{'plus' if delta_millis > 0 else 'minus'}_" \
+                                   f"{abs(delta_millis)}.mp4"
+                    if counter == 1 and not args['append']:
+                        save_data(shifted_path, delta_millis, int(args['frames']))
+                    else:
+                        save_data(shifted_path, delta_millis, int(args['frames']), False)
 
 
 

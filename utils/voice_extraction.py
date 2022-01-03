@@ -53,16 +53,13 @@ def separate_voice(audio_file):
     y_foreground = librosa.istft(D_foreground)
     sf.write(f'{audio_file.replace(".wav", "")}_voice.wav', y_foreground, samplerate=22050, subtype='PCM_24')
 
-def calculate_zero_crossing_rate(audio_file, video_file):
-    np.set_printoptions(threshold=sys.maxsize)
+def calculate_zero_crossing_rate(audio_file, video_file, frames_count):
     cap = cv2.VideoCapture(video_file)
     framespersecond = int(cap.get(cv2.CAP_PROP_FPS))
     frames_hop = 22050 // framespersecond
     y, sr = librosa.load(audio_file)
-    frames = librosa.util.frame(y, frame_length=frames_hop, hop_length=frames_hop, axis=0)[:100]
-    zero_crossing_rate = librosa.feature.zero_crossing_rate(y,frame_length=frames_hop, hop_length=frames_hop).flatten()[:100]
-    print('ZERO CROSSING RATE: \n', zero_crossing_rate)
-    print('len zero crossing rate: ', len(zero_crossing_rate))
+    frames = librosa.util.frame(y, frame_length=frames_hop, hop_length=frames_hop, axis=0)[:frames_count]
+    zero_crossing_rate = librosa.feature.zero_crossing_rate(y, frame_length=frames_hop, hop_length=frames_hop).flatten()[:frames_count]
     return zero_crossing_rate
 
 def save_data(video_file):

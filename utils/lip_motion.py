@@ -13,20 +13,11 @@ import pandas as pd
 # #                 help="path to output csv file")
 # args = vars(ap.parse_args())
 
-# mouth_cascade = cv2.CascadeClassifier('./cascade_files/haarcascade_mcs_mouth.xml')
-#
-# if mouth_cascade.empty():
-#   raise IOError('Unable to load the mouth cascade classifier xml file')
 
-def capture_lips_motion(video_file):
+def capture_lips_motion(video_file, frame_count):
     cap = cv2.VideoCapture(video_file)
     framespersecond = int(cap.get(cv2.CAP_PROP_FPS))
     i = 0
-    df = pd.DataFrame()
-    d = {'Audio/Video': 'Video',
-         'Name': video_file,
-         'Shift': get_shift_from_video_name(video_file)}
-    df = df.append(d, ignore_index=True)
     lips_separation = []
     while (cap.isOpened()):
         ret, frame = cap.read()
@@ -34,7 +25,6 @@ def capture_lips_motion(video_file):
             break
         frameId = int(round(cap.get(1)))
 
-        # mouth_rects = mouth_cascade.detectMultiScale(frame, 1.7, 11)
         detected_face = face_detection(frame)
         landmarks = landmark_detection(detected_face, frame)
         print('\nframe number ', frameId)
@@ -55,15 +45,14 @@ def capture_lips_motion(video_file):
         # Line thickness of 2 px
         thickness = 1
 
-        cv2.putText(frame, f'Lips separation: {format(calculate_lips_distance(landmarks), ".2f")}', org, font, fontScale, color, thickness, cv2.LINE_AA)
-        cv2.imwrite(f"images/frame_{frameId}.jpg", frame)
+       # cv2.putText(frame, f'Lips separation: {format(calculate_lips_distance(landmarks), ".2f")}', org, font, fontScale, color, thickness, cv2.LINE_AA)
+       # cv2.imwrite(f"images/frame_{frameId}.jpg", frame)
 
         i += 1
-        if frameId > 99:
+        if frameId > frame_count - 1:
             cap.release()
             cv2.destroyAllWindows()
 
-    print('DF:\n', df)
     print("Lips separation normalized:\n ", normalize_lip_separation_values(lips_separation))
     normalized_lips = normalize_lip_separation_values(lips_separation)
     # plt.plot(normalized_lips)
@@ -93,30 +82,27 @@ def get_shift_from_video_name(video_path):
     return shift_value
 
 
-# TODO: change to extract only lips landmarks
-
 def landmark_detection(faces,gray_img):
     landmark_detector = dlib.shape_predictor("utils/cascade_files/shape_predictor_68_face_landmarks.dat")
     for face in faces:
         landmarks = landmark_detector(gray_img,face)
-        face_points = []
-        for n in range(68):
+        mouth_points = []
+        # Get only (61, 68) landmarks to save the time
+        for n in range(61, 68):
             x = landmarks.part(n).x
             y = landmarks.part(n).y
             if n in [61, 62, 63, 65, 66, 67]:
                 cv2.circle(gray_img, (x, y), 2, (0, 255, 0), -1)
-            face_points.append([x,y])
-            face_points_array = np.array(face_points) # Creating an array of coordinates of the landmarks.
-            #cv2.circle(img,(x,y),2,(0,0,255),2,cv2.FILLED)
-            #cv2.putText(img,str(n),(x,y-10),cv2.FONT_HERSHEY_COMPLEX_SMALL,0.5,(255,0,0),1)
+            mouth_points.append([x,y])
+            mouth_points_array = np.array(mouth_points) # Creating an array of coordinates of the landmarks.
             # The above two lines can be used to display the landmarks and get the indices of other parts like nose,eyes etc.
-    return face_points_array
+    return mouth_points_array
 
 def calculate_lips_distance(landmarks):
 
-    A = distance(landmarks[61], landmarks[67])
-    B = distance(landmarks[62], landmarks[66])
-    C = distance(landmarks[63], landmarks[65])
+    A = distance(landmarks[0], landmarks[6])
+    B = distance(landmarks[1], landmarks[5])
+    C = distance(landmarks[2], landmarks[4])
 
     lips_separation_distance = (A + B + C) / 3.0
 
