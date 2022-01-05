@@ -28,7 +28,7 @@ def get_shift_from_video_name(video_path):
 
 def save_data(video_file, shift, frames_count, create_header=True):
 
-    # Checking if the frame_count does not exceed lenght of video
+    # Checking if the frame_count does not exceed length of video
     clip = VideoFileClip(video_file)
     frames = int(clip.fps * clip.duration)
 
@@ -36,7 +36,8 @@ def save_data(video_file, shift, frames_count, create_header=True):
         # Saving audio data
         extract_audio(video_file)
         separate_voice(video_file.replace('.mp4', '.wav'))
-        data = calculate_zero_crossing_rate(video_file.replace('.mp4', '_voice.wav'), video_file, frames_count=frames_count)
+        zcr = calculate_zero_crossing_rate(video_file.replace('.mp4', '_voice.wav'),
+                                           video_file, frames_count=frames_count)
 
         # Saving video data
         lips_sep = capture_lips_motion(video_file, frame_count=frames_count)
@@ -44,7 +45,7 @@ def save_data(video_file, shift, frames_count, create_header=True):
         main_df = pd.DataFrame({'Frame number': np.arange(1,frames_count+1),
                                 'Id': [video_file.split("\\")[-1]] * frames_count,
                                 'Shift': [shift] * frames_count,
-                                'Voice': data,
+                                'Voice': zcr,
                                 'Video': lips_sep})
         main_df.to_csv("data/all_data.csv", mode='a', header=create_header, index=False)
 

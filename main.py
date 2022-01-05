@@ -54,26 +54,32 @@ if __name__ == "__main__":
                 face_file = f'db/{id}/aligned/{id}-{sequence}.mp4-aligned.avi'
                 sequence_file = f'db/{id}/sequences/{id}-{sequence}.mp4'
 
-                clip = VideoFileClip(f"db/{id}/aligned/{video}")
+                try:
 
-                # Skipping videos that failed during processing
-                if clip.duration > 6:
-                    # Shifting for the random value from range (-1000, 1000) milliseconds
-                    delta_millis = n = random.randint(-1000, 1000)
-                    shift(face_path=face_file,
-                          original_path=sequence_file,
-                          video_id=id,
-                          num_sequence=sequence,
-                          delta_millis=delta_millis)
+                    clip = VideoFileClip(f"db/{id}/aligned/{video}")
 
-                    # Tracking voice and lips movement and saving it to .csv
-                    shifted_path = f"db/{id}/shifted/{id}-{sequence}_shifted_" \
-                                   f"{'plus' if delta_millis > 0 else 'minus'}_" \
-                                   f"{abs(delta_millis)}.mp4"
-                    if counter == 1 and not args['append']:
-                        save_data(shifted_path, delta_millis, int(args['frames']))
-                    else:
-                        save_data(shifted_path, delta_millis, int(args['frames']), False)
+                    # Skipping videos that failed during processing
+                    if clip.duration > 6:
+                        # Shifting for the random value from range (-1000, 1000) milliseconds
+                        delta_millis = n = random.randint(-1000, 1000)
+                        # delta_millis = 0
+                        shift(face_path=face_file,
+                              original_path=sequence_file,
+                              video_id=id,
+                              num_sequence=sequence,
+                              delta_millis=delta_millis)
+
+                        # Tracking voice and lips movement and saving it to .csv
+                        shifted_path = f"db/{id}/shifted/{id}-{sequence}_shifted_" \
+                                       f"{'plus' if delta_millis > 0 else 'minus'}_" \
+                                       f"{abs(delta_millis)}.mp4"
+                        if counter == 1 and not args['append']:
+                            save_data(shifted_path, delta_millis, int(args['frames']))
+                        else:
+                            save_data(shifted_path, delta_millis, int(args['frames']), False)
+
+                except IndexError:
+                    print('Corrupted file. Skipping...')
 
 
 

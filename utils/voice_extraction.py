@@ -7,12 +7,12 @@ import numpy as np
 import librosa
 import soundfile as sf
 import pandas as pd
+import matplotlib.pyplot as plt
+import librosa.display
 
 # ap = argparse.ArgumentParser()
 # ap.add_argument("-i", "--input", required=True,
 #                 help="path to input video folder")
-# # ap.add_argument("-o", "--output", required=True,
-# #                 help="path to output csv file")
 # args = vars(ap.parse_args())
 
 def extract_audio(video_file):
@@ -53,13 +53,14 @@ def separate_voice(audio_file):
     y_foreground = librosa.istft(D_foreground)
     sf.write(f'{audio_file.replace(".wav", "")}_voice.wav', y_foreground, samplerate=22050, subtype='PCM_24')
 
+
 def calculate_zero_crossing_rate(audio_file, video_file, frames_count):
     cap = cv2.VideoCapture(video_file)
     framespersecond = int(cap.get(cv2.CAP_PROP_FPS))
     frames_hop = 22050 // framespersecond
     y, sr = librosa.load(audio_file)
     frames = librosa.util.frame(y, frame_length=frames_hop, hop_length=frames_hop, axis=0)[:frames_count]
-    zero_crossing_rate = librosa.feature.zero_crossing_rate(y, frame_length=frames_hop, hop_length=frames_hop).flatten()[:frames_count]
+    zero_crossing_rate = librosa.feature.rms(y, frame_length=frames_hop, hop_length=frames_hop).flatten()[:frames_count]
     return zero_crossing_rate
 
 def save_data(video_file):
@@ -73,7 +74,7 @@ def save_data(video_file):
 if __name__ == '__main__':
     # extract_audio(args['input'])
     # separate_voice(args['input'])
-    # calculate_zero_crossing_rate(args['input'], args['input'].replace('.wav', '.mp4'))
+    # calculate_zero_crossing_rate(args['input'], args['input'].replace('_voice.wav', '.mp4'), 200)
     # calculate(frames)
     # save_data(args['input'])
     pass
