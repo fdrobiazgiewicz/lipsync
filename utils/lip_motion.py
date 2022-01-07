@@ -82,7 +82,7 @@ def get_shift_from_video_name(video_path):
     return shift_value
 
 
-def landmark_detection(faces,gray_img):
+def landmark_detection(faces, gray_img):
     landmark_detector = dlib.shape_predictor("utils/cascade_files/shape_predictor_68_face_landmarks.dat")
     for face in faces:
         landmarks = landmark_detector(gray_img,face)
@@ -93,9 +93,8 @@ def landmark_detection(faces,gray_img):
             y = landmarks.part(n).y
             if n in [61, 62, 63, 65, 66, 67]:
                 cv2.circle(gray_img, (x, y), 2, (0, 255, 0), -1)
-            mouth_points.append([x,y])
+            mouth_points.append([x, y])
             mouth_points_array = np.array(mouth_points) # Creating an array of coordinates of the landmarks.
-            # The above two lines can be used to display the landmarks and get the indices of other parts like nose,eyes etc.
     return mouth_points_array
 
 def calculate_lips_distance(landmarks):

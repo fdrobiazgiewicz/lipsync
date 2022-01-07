@@ -43,16 +43,12 @@ if __name__ == "__main__":
         id = video_id(link)
         pipeline(link, id)
         aligned_videos = os.listdir(f"db/{id}/aligned")
+        print('aligned videos: ', aligned_videos)
         if len(aligned_videos) > 0:
             print(f'Found {len(aligned_videos)} aligned videos. Shifting...')
-            sequence = '001'
             for video, counter in zip(aligned_videos, range(1, len(aligned_videos))):
-                if counter < 10:
-                    sequence = f'00{counter}'
-                else:
-                    sequence = f'0{counter}'
-                face_file = f'db/{id}/aligned/{id}-{sequence}.mp4-aligned.avi'
-                sequence_file = f'db/{id}/sequences/{id}-{sequence}.mp4'
+                face_file = f'db/{id}/aligned/{id}-{counter:03d}.mp4-aligned.avi'
+                sequence_file = f'db/{id}/sequences/{id}-{counter:03d}.mp4'
 
                 try:
 
@@ -62,15 +58,14 @@ if __name__ == "__main__":
                     if clip.duration > 6:
                         # Shifting for the random value from range (-1000, 1000) milliseconds
                         delta_millis = n = random.randint(-1000, 1000)
-                        # delta_millis = 0
                         shift(face_path=face_file,
                               original_path=sequence_file,
                               video_id=id,
-                              num_sequence=sequence,
+                              num_sequence=f'{counter:03d}',
                               delta_millis=delta_millis)
 
                         # Tracking voice and lips movement and saving it to .csv
-                        shifted_path = f"db/{id}/shifted/{id}-{sequence}_shifted_" \
+                        shifted_path = f"db/{id}/shifted/{id}-{counter:03d}_shifted_" \
                                        f"{'plus' if delta_millis > 0 else 'minus'}_" \
                                        f"{abs(delta_millis)}.mp4"
                         if counter == 1 and not args['append']:

@@ -1,7 +1,7 @@
 import argparse
+import os
 
 from moviepy.video.io.VideoFileClip import VideoFileClip
-from moviepy.editor import *
 from utils.voice_extraction import extract_audio, separate_voice, calculate_zero_crossing_rate
 from utils.lip_motion import capture_lips_motion
 import pandas as pd
@@ -16,8 +16,6 @@ import numpy as np
 # args = vars(ap.parse_args())
 
 
-def slice_video(video, frames):
-    pass
 
 def get_shift_from_video_name(video_path):
     video_name = video_path.split("\\")[-1]
@@ -46,8 +44,10 @@ def save_data(video_file, shift, frames_count, create_header=True):
         # Saving video data
         lips_sep = capture_lips_motion(video_file, frame_count=frames_count)
 
-        main_df = pd.DataFrame({'Frame number': np.arange(1,frames_count+1),
-                                'Id': [video_file.split("\\")[-1]] * frames_count,
+        video_name = os.path.basename(os.path.normpath(video_file))
+
+        main_df = pd.DataFrame({'Frame number': np.arange(1, frames_count+1),
+                                'Id': [video_name] * frames_count,
                                 'Shift': [shift] * frames_count,
                                 'Voice': zcr,
                                 'Video': lips_sep})

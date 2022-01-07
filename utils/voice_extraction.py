@@ -48,7 +48,6 @@ def separate_voice(audio_file):
     # to separate the components
 
     S_foreground = mask_v * S_full
-    S_background = mask_i * S_full
     D_foreground = S_foreground * phase
     y_foreground = librosa.istft(D_foreground)
     sf.write(f'{audio_file.replace(".wav", "")}_voice.wav', y_foreground, samplerate=22050, subtype='PCM_24')
