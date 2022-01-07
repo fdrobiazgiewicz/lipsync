@@ -14,7 +14,7 @@ opencv-python-headless==4.4.0.42
 opencv-utils==0.0.2
 Pillow==8.0.1
 proglog==0.1.9
-pytube==11.0.1
+pytube==11.0.2
 requests==2.25.0
 scenedetect==0.5.4.1
 tqdm==4.49.0

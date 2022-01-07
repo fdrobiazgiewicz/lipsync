@@ -81,5 +81,11 @@ if __name__ == "__main__":
                 except IndexError:
                     print('Corrupted file. Skipping...')
 
+                except OSError:
+                    print('Corrupted file. Skipping...')
+
+                except Exception as e:
+                    print('Error: ', e)
+
 
 

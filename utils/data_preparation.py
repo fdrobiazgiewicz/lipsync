@@ -1,7 +1,7 @@
 import argparse
 
 from moviepy.video.io.VideoFileClip import VideoFileClip
-
+from moviepy.editor import *
 from utils.voice_extraction import extract_audio, separate_voice, calculate_zero_crossing_rate
 from utils.lip_motion import capture_lips_motion
 import pandas as pd
@@ -14,6 +14,10 @@ import numpy as np
 # # ap.add_argument("-o", "--output", required=True,
 # #                 help="path to output csv file")
 # args = vars(ap.parse_args())
+
+
+def slice_video(video, frames):
+    pass
 
 def get_shift_from_video_name(video_path):
     video_name = video_path.split("\\")[-1]
