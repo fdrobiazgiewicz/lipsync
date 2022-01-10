@@ -1,34 +1,18 @@
-import argparse
 import os
-
 from moviepy.video.io.VideoFileClip import VideoFileClip
 from utils.voice_extraction import extract_audio, separate_voice, calculate_zero_crossing_rate
 from utils.lip_motion import capture_lips_motion
 import pandas as pd
 import numpy as np
 
-
-# ap = argparse.ArgumentParser()
-# ap.add_argument("-i", "--input", required=True,
-#                 help="path to input video folder")
-# # ap.add_argument("-o", "--output", required=True,
-# #                 help="path to output csv file")
-# args = vars(ap.parse_args())
-
-
-
-def get_shift_from_video_name(video_path):
-    video_name = video_path.split("\\")[-1]
-    shift_part = video_name.split('shifted_')[-1]
-    if 'plus' in shift_part:
-        shift_value = shift_part.replace('.mp4', '')
-        shift_value = int(shift_value.replace('plus_', ''))
-    else:
-        shift_value = shift_part.replace('.mp4', '')
-        shift_value = int(shift_value.replace('minus_', '-'))
-    return shift_value
-
 def save_data(video_file, shift, frames_count, create_header=True):
+    '''
+    Trigger the necessary functions and save data in csv format
+    :param video_file: path to video file
+    :param shift: shift of the video
+    :param frames_count: number of frames to be analyzed
+    :param create_header: whether to create header in csv file
+    '''
 
     # Checking if the frame_count does not exceed length of video
     clip = VideoFileClip(video_file)
@@ -55,8 +39,3 @@ def save_data(video_file, shift, frames_count, create_header=True):
 
     else:
         print(f'Video has less than {frames_count} frames. Aborting...')
-
-if __name__ == "__main__":
-    # shift = get_shift_from_video_name(args['input'])
-    # save_data(args['input'], shift)
-    pass

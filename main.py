@@ -73,9 +73,6 @@ if __name__ == "__main__":
                         else:
                             save_data(shifted_path, delta_millis, int(args['frames']), False)
 
-                except IndexError:
-                    print('Corrupted file. Skipping...')
-
                 except OSError:
                     print('Corrupted file. Skipping...')
 

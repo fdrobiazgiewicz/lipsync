@@ -33,8 +33,8 @@ def detect_with_fallback(frame_mat,
 
 
 def detect_and_scale(frame_mat, show_result=False, output_size=256):
-    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_eye.xml')
+    face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'utils/cascade_files/haarcascade_frontalface_default.xml')
+    eye_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'utils/cascade_files/haarcascade_eye.xml')
 
     gray = cv2.cvtColor(frame_mat, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray,

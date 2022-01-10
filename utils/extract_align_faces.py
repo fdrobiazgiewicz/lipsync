@@ -1,12 +1,12 @@
+import os
 import cv2
 from dlib import get_frontal_face_detector, shape_predictor
 from imutils.face_utils import facealigner
 from imutils.video import FileVideoStream
 from tqdm import tqdm
 
-# TODO: fix those global variables
-LANDMARKS_FILE_68 = '/Users/phili/private_workspace/lipsync/models/shape_predictor_68_face_landmarks.dat'
-LANDMARKS_FILE_5 = '/Users/phili/private_workspace/lipsync/models/shape_predictor_5_face_landmarks.dat'
+LANDMARKS_FILE_68 = os.getcwd() + '/utils/cascade_files/shape_predictor_68_face_landmarks.dat'
+LANDMARKS_FILE_5 = os.getcwd() + '/utils/cascade_files/shape_predictor_5_face_landmarks.dat'
 WIDTH = 256
 
 FACE_DETECTOR = get_frontal_face_detector()
